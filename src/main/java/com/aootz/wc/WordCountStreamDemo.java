@@ -1,8 +1,8 @@
 package com.aootz.wc;
 
+import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.functions.KeySelector;
-import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
@@ -15,6 +15,20 @@ public class WordCountStreamDemo {
 
         // 1. 创建执行环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        // STREAMING
+        //5> (hello,1)
+        //7> (1,1)
+        //5> (hello,2)
+        //5> (3,1)
+        //5> (hello,3)
+        //4> (2,1)
+
+        // BATCH
+        //(1,1)
+        //(2,1)
+        //(3,1)
+        //(hello,3)
+        env.setRuntimeMode(RuntimeExecutionMode.BATCH);
         // 2. 读取数据
         DataStreamSource<String> source = env.readTextFile("input/word.txt");
         // 3. 处理数据: 切分、转换、分组、聚合
